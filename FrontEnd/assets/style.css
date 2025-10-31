@@ -90,7 +90,6 @@ video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  background-color: #fffef8;
 }
 /* HTML5 display-role reset for older browsers */
 article,
@@ -138,21 +137,24 @@ body {
 header {
   display: flex;
   justify-content: space-between;
-  margin: 50px;
+  margin: 50px 0;
+  max-width: 1140px;
 }
+main {
+  max-width: 1140px;
+}
+
 section {
   margin: 50px 0;
 }
 
-h1,
-h1 a {
+h1 {
   display: flex;
   flex-direction: column;
   font-family: "Syne";
   font-size: 22px;
   font-weight: 800;
   color: #b1663c;
-  text-decoration: none;
 }
 
 h1 > span {
@@ -207,6 +209,7 @@ li:hover {
   text-align: center;
   margin-bottom: 1em;
 }
+
 .gallery {
   width: 100%;
   display: grid;
@@ -266,421 +269,374 @@ footer nav ul {
   margin: 2em;
 }
 
-.filter {
+/************ Ajout de code CSS ************/
+
+/****** Page accueil ******/
+
+/** Bandeau noir "Mode edition" **/
+
+#edit-mode-banner {
   display: flex;
-  flex-direction: row;
-  gap: 20px;
+  align-items: center;
   justify-content: center;
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  font-size: 1.2em;
+  width: 190%;
+  margin-left: -520px;
 }
 
-.filter a {
+#edit-mode-banner i {
+  color: white;
+  margin-right: 0.6rem;
+}
+
+/** bouton "modifier **/
+.edit-link {
+  margin-left: 1rem;
+  font-size: 0.5em;
+  text-decoration: none;
+  color: black;
+  display: inline-flex;
+  align-items: center;
+}
+
+.edit-link i {
+  margin-right: 0.5rem;
+}
+
+/** Style liens de navigation **/
+nav li a {
+  text-decoration: none;
+  color: black;
+}
+
+nav li a:hover {
+  color: #b1663c;
+}
+
+/** Style boutons filtres **/
+#btn-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  font-size: 16px;
-  margin-left: 5px;
-  border-radius: 60px;
-  border: 1px solid #1d6154;
-  font-weight: 700;
-  height: 37px;
-  padding: 0 10px 0 10px;
-  margin-bottom: 51px;
-  font-family: "Syne";
-  text-decoration: none;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+#btn-container .btn {
+  background-color: white;
   color: #1d6154;
+  font-family: "Syne";
+  border-radius: 25px;
+  border: #1d6154 solid 2px;
+  font-size: 18px;
+  min-width: 8rem;
+  padding: 8px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
-.filter .selected {
-  background: #1d6154;
-  color: #fff;
+#btn-container .btn-selected {
+  background-color: #1d6154;
+  color: white;
+  font-family: "Syne";
+  border-radius: 25px;
+  border: #1d6154 solid 2px;
+  font-size: 18px;
+  min-width: 8rem;
+  padding: 8px;
+  margin-right: 10px;
+  cursor: pointer;
 }
 
-#login h2 {
-  margin-top: 150px;
-  display: flex;
+/****** Page de LogIn ******/
+
+.logPage {
+  font-weight: bold;
+}
+
+.logPage:hover {
+  color: black;
+}
+
+.mainLog {
+  height: 100%;
+  margin-top: 16rem;
+  padding-left: 8rem;
+  padding-right: 8rem;
+}
+
+#logIn {
+  text-align: center;
   justify-content: center;
+  width: 50%;
+  margin: auto;
 }
 
-#login label {
-  display: flex;
-  margin-left: 400px;
-  margin-top: 37px;
+#logIn > * {
+  text-align: center;
 }
 
-#login input {
+h2 {
+  margin-top: 10rem;
+}
+
+/* style formulaire */
+#logIn form {
+  text-align: left;
+  margin-top: 30px;
   display: flex;
-  padding-top: 6px;
-  margin-left: 400px;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+#logIn input {
   height: 50px;
   font-size: 1.2em;
   border: none;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  width: 379px;
-  height: 51px;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  padding-left: 20px;
 }
 
-#login #se_connecter {
-  margin-top: 47px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#logIn #submit-button {
+  width: 14rem !important;
   cursor: pointer;
 }
 
-#login a {
-  display: flex;
-  justify-content: center;
-  color: #3d3d3d;
-  font-weight: 500;
-  margin-bottom: 355px;
+#LogIn label {
+  margin: 2em 0 1em 0;
 }
 
-header ul a {
-  text-decoration: none;
-  color: black;
+/* <p> oubli mot de passe */
+.forgetPassword {
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-#loginLink {
-  font-size: 16px;
-  font-weight: 600;
+/* Positionnement footer page LogIn */
+.footer-log {
+  position: absolute;
+  bottom: 0;
+  right: 20rem;
 }
 
-#login_error {
-  padding-top: 47px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #b1663c;
-  font-size: 16px;
-  font-weight: 800;
-  display: none;
-}
+/****** Style modale ******/
 
-.bandeau_edition {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 59px;
-  background-color: black;
-  color: white;
-  width: 100%;
+/* Arrière-plan overlay */
+.overlay {
   position: fixed;
   top: 0;
   left: 0;
-  margin-bottom: 38px;
-}
-
-.bandeau_edition .fa-regular {
-  background-color: black;
-  color: white;
-  display: flex;
-  justify-content: center;
-  margin-right: 11px;
-}
-
-#edition {
-  display: none;
-}
-
-h2 #modif_projet {
-  color: black;
-  font-size: 14px;
-  font-weight: 400;
-  margin-left: 31px;
-  display: none;
-  text-decoration: none;
-  font-family: "Work Sans";
-}
-
-#modif_projet .fa-regular {
-  margin-right: 10px;
-}
-
-/**MODALE**/
-#modal1,
-#modal2 {
-  position: fixed;
-  left: 0;
-  top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.6);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  /*z-index: 1000;*/
 }
 
-.modal-wrapper,
-.modal-wrapper-new {
-  display: flex;
-  justify-content: end;
-  width: 630px;
-  height: 688px;
+/* Fenêtre modale */
+.modal {
+  text-align: center;
+  background-color: white;
+  padding: 50px 90px;
   border-radius: 10px;
-  background-color: white;
-  flex-direction: column;
-  justify-content: flex-start;
-  margin-top: 10px;
-}
-
-.title {
-  width: 100%;
-  height: 40px;
-  background-color: white;
-}
-
-.js-modal-close-new {
-  background-color: white;
-  border: none;
-  margin-top: 26px;
-  margin-right: 30px;
-  position: absolute;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.top1 {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  background-color: white;
-}
-
-.js-modal-close-1 {
-  background-color: white;
-  border: none;
-  margin-top: 26px;
-  margin-right: 30px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-.js-modal-close-new {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 600px;
+  max-width: 100%;
   position: relative;
 }
 
-.modal-wrapper h3 {
+.modal h2 {
+  font-size: 32px;
+  font-family: "work sans", sans-serif;
+  font-weight: 300;
+  color: black;
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+/* Bouton de fermeture */
+.close-modal {
   position: absolute;
-  height: 30px;
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  font-size: 26px;
-  width: 630px;
-  background-color: white;
+  top: 20px;
+  right: 20px;
+  border: none;
+  background: none;
+  font-size: 2.5rem;
+  cursor: pointer;
 }
 
-.modal-wrapper-new h3 {
-  justify-content: center;
-  font-size: 26px;
-  width: 630px;
-  display: flex;
-  margin-top: 10px;
-  background-color: white;
-}
+/** --- Première vue --- **/
 
+/* div pour affichage gallery */
 .modal-gallery {
-  padding: 1px 99px 36px 105px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  column-gap: 9px;
-  border-radius: 10px;
-  background-color: white;
-}
-
-.modal-gallery figure {
-  position: relative;
-  width: 78.63px;
-  height: 139.87px;
-  background-color: white;
-}
-.modal-gallery img {
-  width: 76.61px;
-  height: 102.57px;
-  margin-top: 35px;
-}
-
-.modal-gallery figcaption {
-  display: none;
-}
-
-.fa-trash-can {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 9px;
-  color: white;
-  width: 17px;
-  height: 17px;
-  background-color: black;
-  border-radius: 2px;
-  position: relative;
-  bottom: 98px;
-  left: 54.14px;
-  cursor: pointer;
-}
-
-#separation1 {
-  display: flex;
-  background-color: #b3b3b3;
-  height: 1px;
-  width: 420px;
-  margin-left: 105px;
-}
-
-#separation2 {
-  display: flex;
-  background-color: #b3b3b3;
-  height: 1px;
-  width: 420px;
-  margin-top: 47px;
-}
-
-#ajout_projet {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 38px;
-  margin-left: 195px;
-  background: #1d6154;
-  border-radius: 60px;
-  color: white;
-  font-family: "Syne";
-  font-weight: 700;
-  font-size: 14px;
-  border: none;
-  width: 237px;
-  height: 36px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.modal-back {
-  background-color: white;
-  border: none;
-  margin-top: 26px;
-  margin-left: 30px;
-  height: 24px;
-}
-
-.top {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  background-color: white;
-}
-
-.modal-back .fa-solid {
-  display: flex;
-  cursor: pointer;
-  font-size: 21px;
-  background-color: white;
-}
-
-.modal-new-photo {
-  display: flex;
-  width: 420px;
-  height: 169px;
-  margin: 36px 0 9px 0;
-  background-color: #e8f1f7;
-  border-radius: 3px;
-  margin-bottom: 30px;
-  flex-direction: column;
-  align-items: center;
-}
-
-.modal-new-photo-form {
-  display: flex;
-  width: 420px;
-  flex-direction: column;
-  background-color: white;
-}
-
-.form {
-  width: 630px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  background-color: white;
-}
-
-.input-titre {
-  margin-top: 10px;
-  margin-bottom: 21px;
-  height: 51px;
-  border: none;
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  background-color: white;
-}
-
-.select-category {
-  margin-top: 10px;
-  height: 51px;
-  border: none;
-  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-  background-color: white;
-}
-
-.button-submit {
-  margin-top: 32px;
-  border-radius: 60px;
-  border: none;
-  height: 36px;
-  width: 237px;
-  color: white;
-  background-color: #a7a7a7;
-  margin-left: 80px;
-  font-family: "Syne";
-  font-size: 14px;
-}
-
-.modal-new-photo-form label,
-.modal-new-photo-form div,
-.top div,
-.top i {
-  background-color: white;
-}
-
-.fa-image {
-  font-size: 76px;
-  color: #b9c5cc;
-  display: flex;
-  justify-content: center;
-  margin-top: 13px;
   width: 100%;
-  background-color: #e8f1f6;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 8px;
+  grid-row-gap: 20px;
+  border-bottom: 1px solid darkgrey;
+  padding-bottom: 5rem;
 }
 
-.button-add-photo {
-  border-radius: 60px;
-  background-color: #cbd6dc;
+.modal-gallery img {
+  width: 110px;
+}
+
+.modal-project {
+  position: relative;
+}
+
+/* Bouton "ajouter photo" */
+.add-photo {
+  font-size: 18px;
+  font-family: "work sans";
+  margin-top: 10px;
+  padding: 10px 60px;
+  background-color: #1d6154;
+  color: white;
   border: none;
-  height: 36px;
-  width: 173px;
-  color: #306685;
-  font-size: 14px;
-  margin-top: 6px;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 2.5rem;
+}
+
+/* Bouton "trash" (delete) */
+
+.icon-container {
+  border-radius: 5px;
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background-color: black;
+  top: 8px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
   cursor: pointer;
 }
 
-.precision {
-  background-color: #e8f1f7;
-  font-size: 10px;
+.delete-icon {
+  color: white;
+  font-size: 14px;
+}
+
+/** --- Deuxieme vue --- **/
+
+.back-button {
+  color: black;
+  position: absolute;
+  top: 30px;
+  left: 20px;
+  border: none;
+  background: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Elements formulaire */
+.form-container {
   display: flex;
+  flex-direction: column;
+  width: 100%;
+  border-bottom: 1px solid darkgrey;
+  padding-bottom: 4.5rem;
+}
+
+/* Element ajout photo */
+.add-photo-container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  margin-top: 7px;
-  font-family: "Work Sans";
-}
-
-.picture-selection {
+  align-items: center;
   background-color: #e8f1f6;
+  width: 100%;
+  height: 260px;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+.icon-image {
+  font-size: 6rem;
+  color: #cbd6dc;
+  margin-bottom: 1rem;
+}
+.add-photo-btn {
+  width: 16rem;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: #cbd6dc;
+  color: #306685;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+.image-format {
+  margin-top: 1rem;
 }
 
-#picture-preview {
-  display: none;
-  max-width: 129px;
-  max-height: 193px;
+/* Elements de saisi */
+.form-container label {
+  font-weight: bold;
+  display: block;
+  text-align: left;
+  margin-bottom: 0.8rem;
+  font-size: 1rem;
+}
+
+.form-container input {
+  /*width: 100%;*/
+  width: 580px;
+  height: 50px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  font-family: "work sans";
+  padding-left: 20px;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.form-container select {
+  width: 100%;
+  height: 55px;
+  font-size: 1.2em;
+  border: none;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+  font-family: "work sans";
+  padding-left: 20px;
+  position: relative;
+}
+
+/* Bouton "Valider" par defaut */
+.submit-button {
+  font-size: 18px;
+  font-family: "work sans";
+  margin-top: 10px;
+  padding: 10px 60px;
+  background-color: grey;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 2.5rem;
+}
+
+/* Bouton "Valider" lorsque formulaire remplie */
+.submit-button.enabled {
+  background-color: #1d6154;
+  cursor: pointer;
+}
+
+.submit-button.disable {
+  background-color: grey;
+  cursor: not-allowed;
 }

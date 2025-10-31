@@ -37,7 +37,9 @@ const CLOSE_MODAL = function (e) {
 }
 
 //AJOUT LISTENER SUR CLIQUE BOUTON MODIFIER POUR APPELER OUVERTURE MODALE  
-BUTTON_MODIF_WORKS.addEventListener('click', OPEN_MODAL)
+if (BUTTON_MODIF_WORKS){
+  BUTTON_MODIF_WORKS.addEventListener('click', OPEN_MODAL)
+}
 
 //FONCTION SUPPRESSION TRAVAUX
 const DELETE_WORK = function (e) {
@@ -73,3 +75,4 @@ function deleteWorkFetch(idWork){
     })
 
 }
+

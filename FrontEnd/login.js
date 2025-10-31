@@ -4,9 +4,11 @@ const USERS_API = BASE_URL+"users/login";
 const LOGIN_BUTTON = document.getElementById("se_connecter")
 
 // AJOUT D'UN EVENEMENT AU CLIC POUR SE CONNECTER
-LOGIN_BUTTON.addEventListener("click", function() {
-    loginUser();
-});
+if (LOGIN_BUTTON) {
+    LOGIN_BUTTON.addEventListener("click", function() {
+        loginUser();
+    });
+}
 
 
 function loginUser(){

@@ -156,3 +156,4 @@ TITLE_NEW_PHOTO.addEventListener("change",VERIFICATION);
 document.querySelectorAll('#ajout_projet').forEach(a=>{
     a.addEventListener('click', OPEN_MODAL_NEW)
 })
+
