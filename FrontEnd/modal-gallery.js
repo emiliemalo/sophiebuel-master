@@ -57,8 +57,9 @@ const DELETE_WORK = function (e) {
 //APPEL API SUPPRESSION TRAVAUX
 function deleteWorkFetch(idWork){
     let token = sessionStorage.getItem("token");
+    const WORKS_API_DELETE = "http://localhost:5678/api/works";
 
-    fetch (WORKS_API+'/'+idWork, {
+    fetch (WORKS_API_DELETE+'/'+idWork, {
         method: "DELETE",
         headers: {
             'Accept': '*/*',
