@@ -1,48 +1,42 @@
-//CONSTANTES
-const BASE_URL = "http://localhost:5678/api/"
-const USERS_API = BASE_URL+"users/login";
-const LOGIN_BUTTON = document.getElementById("se_connecter")
+// Constantes
+const LOGIN_BASE_URL = "http://localhost:5678/api/";
+const USERS_API = LOGIN_BASE_URL + "users/login";
+const LOGIN_BUTTON = document.getElementById("se_connecter");
 
-// AJOUT D'UN EVENEMENT AU CLIC POUR SE CONNECTER
+// Événement de connexion
 if (LOGIN_BUTTON) {
     LOGIN_BUTTON.addEventListener("click", function() {
         loginUser();
     });
 }
 
-
-function loginUser(){
-    //RECUPERATION E-MAIL ET MOT DE PASSE
+// Fonction de connexion
+function loginUser() {
     let user = {
         email: document.getElementById("email").value,
         password: document.getElementById("password").value
-    }; 
-
-    //APPEL DE L'API POUR VERIFIER L'E-MAIL ET LE MOT DE PASSE
-    fetch (USERS_API,{
+    };
+    
+    fetch(USERS_API, {
         method: 'POST',
         headers: {
-             'Content-Type': 'application/json;charset=utf-8'
-         },
-          body: JSON.stringify(user)
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
     })
-    .then(response => {
-        if (response.status===200){
-            //SI LOGIN OK ON CONVERTI EN JSON 
+    .then(function(response) {
+        if (response.status === 200) {
             return response.json();
-        }else{
-            //SI EMAIL OU MDP KO ON AFFICHE MESSAGE ERREUR
-            loginError=document.getElementById("login_error");
-            loginError.innerHTML="E-mail ou mot de passe incorrect";
-            loginError.style.display="flex";
+        } else {
+            let loginError = document.getElementById("login_error");
+            loginError.innerHTML = "E-mail ou mot de passe incorrect";
+            loginError.style.display = "flex";
         }
     })
-    .then(data=>{
-        if(data){ //SI LOGIN OK 
-            // STOCKAGE DU TOKEN DANS LE SESSION STORAGE
+    .then(function(data) {
+        if (data) {
             sessionStorage.setItem("token", data.token);
-            // REDIRECTION VERS LA PAGE D'ACCUEIL
-             window.location.href = "index.html";
+            window.location.href = "index.html";
         }
-    })
-}   
+    });
+}

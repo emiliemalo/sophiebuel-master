@@ -403,13 +403,6 @@ header ul a {
   color: white;
   padding: 1rem;
   font-size: 1.2em;
-  width: 190%;
-  margin-left: -520px;
-}
-
-#edit-mode-banner i {
-  color: white;
-  margin-right: 0.6rem;
 }
 
 /** bouton "modifier **/
