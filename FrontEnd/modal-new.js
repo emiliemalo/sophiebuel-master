@@ -30,7 +30,7 @@ function handleModalContentClick(e) {
     e.stopPropagation();
 }
 
-// Fonction simple pour ouvrir la modale d'ajout de photo
+ 
 //FONCTION OUVERTURE BOITE MODALE
 const OPEN_MODAL_NEW = function (e) {
     if (e) {
@@ -165,7 +165,7 @@ function uploadWork(e) {
     .then(function(response) {
         if (response.status === 201) {
             alert("Projet ajouté !");
-            // On réinitialise le formulaire mais on garde la modal ouverte
+            // On réinitialise le formulaire
             resetPhotoSelection();
             resetForm();
             // On rafraîchit les galeries pour voir la nouvelle photo
@@ -173,8 +173,17 @@ function uploadWork(e) {
                 refreshWorks(document.querySelector(".modal-gallery"), true);
                 refreshWorks(document.querySelector(".gallery"), false);
             }
-            checkForm();
-            // On ne ferme PAS la modal pour pouvoir ajouter d'autres photos
+            // Fermer complètement la modale d'ajout (modal2)
+            closeModalNew();
+            // Fermer aussi la modale de galerie (modal1) si elle est ouverte
+            const modal1 = document.querySelector("#modal1");
+            if (modal1) {
+                modal1.style.display = "none";
+            }
+            const modalWrapper1 = document.querySelector(".modal-wrapper");
+            if (modalWrapper1) {
+                modalWrapper1.style.display = "none";
+            }
         } else if (response.status === 400) {
             alert("Requête invalide. Vérifiez les champs.");
         } else if (response.status === 401) {
