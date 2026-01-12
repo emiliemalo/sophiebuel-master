@@ -1,6 +1,7 @@
-// Placeholder module to avoid 404 and MIME errors when the script is loaded
+
+// Initialisation de la modale de galerie au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
-    // no-op for now
+
 });
 
 //CONSTANTES
