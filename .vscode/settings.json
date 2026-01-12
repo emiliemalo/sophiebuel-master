@@ -1,7 +1,5 @@
-{ 
-    "liveServer.settings.ignoreFiles": [
-        "Backend/**"
-    ],
-    "postman.settings.dotenv-detection-notification-visibility": false,
-    "liveServer.settings.port": 5501
+{
+  "liveServer.settings.ignoreFiles": ["Backend/**"],
+  "postman.settings.dotenv-detection-notification-visibility": false,
+  "liveServer.settings.port": 5502
 }

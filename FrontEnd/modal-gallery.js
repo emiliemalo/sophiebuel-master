@@ -29,7 +29,11 @@ function deleteWorkFetch(idWork) {
     .then(response => {
         if (response.status === 200 || response.status === 201 || response.status === 204) {
             refreshWorks(GALLERY_MODALE, true); // REAFFICHAGE TRAVAUX DANS MODALE
-            refreshWorks(GALLERY_DIV, false); // REAFFICHAGE TRAVAUX DANS INDEX
+            // GALLERY_DIV est déclaré dans gallery.js, on le récupère directement
+            const galleryDiv = typeof GALLERY_DIV !== 'undefined' ? GALLERY_DIV : document.querySelector(".gallery");
+            if (galleryDiv) {
+                refreshWorks(galleryDiv, false); // REAFFICHAGE TRAVAUX DANS INDEX
+            }
         } else {
             alert("Erreur lors de la suppression du projet.");
         }

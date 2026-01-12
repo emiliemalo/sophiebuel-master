@@ -3,8 +3,8 @@
 // Utiliser les constantes globales si elles existent, sinon fallback local
 const WORKS_API_LOCAL = (typeof WORKS_API !== 'undefined') ? WORKS_API : "http://localhost:5678/api/works";
 const CATEGORY_API_LOCAL = (typeof CATEGORY_API !== 'undefined') ? CATEGORY_API : "http://localhost:5678/api/categories";
-const GALLERY_MODALE = document.querySelector(".modal-gallery");
-const GALLERY_DIV = document.querySelector(".gallery");
+// GALLERY_MODALE est déjà déclaré dans modal-gallery.js
+// GALLERY_DIV est déjà déclaré dans gallery.js
 const BUTTON_CLOSE_NEW = document.querySelector('.js-modal-close-new');
 const BUTTON_BACK = document.querySelector('.modal-back');
 const BUTTON_ADD = document.querySelector('.button-add-photo');
@@ -18,39 +18,68 @@ const BUTTON_SUBMIT = document.querySelector('.button-submit');
 let modal_new = null;
 
 
+// Handler pour fermer la modale en cliquant sur le fond (en dehors)
+function handleModalBackgroundClick(e) {
+    // Si on clique directement sur la modale (le fond), on ferme
+    // e.currentTarget est toujours la modale (#modal2)
+    // e.target est l'élément sur lequel on a cliqué
+    if (e.target === e.currentTarget) {
+        closeModalNew(e);
+    }
+}
+
+// Handler pour empêcher la propagation des clics sur le contenu
+function handleModalContentClick(e) {
+    e.stopPropagation();
+}
+
 // Fonction simple pour ouvrir la modale d'ajout de photo
 //FONCTION OUVERTURE BOITE MODALE
 const OPEN_MODAL_NEW = function (e) {
     e.preventDefault()
     //ON CACHE LA MODAL-GALLERY
     const modal = document.querySelector("#modal1");
-    modal.style.display = "none";
+    if (modal) {
+        modal.style.display = "none";
+    }
     //ON AFFICHE LA MODALE DE CREATION
     modal_new = document.querySelector("#modal2");
-    modal_new.style.display = "flex"
-    modal_new.addEventListener('click', closeModalNew)
-    BUTTON_CLOSE_NEW.addEventListener('click', closeModalNew)
+    if (modal_new) {
+        modal_new.style.display = "flex"
+        // Retirer d'abord l'event listener s'il existe pour éviter les doublons
+        modal_new.removeEventListener('click', handleModalBackgroundClick);
+        modal_new.addEventListener('click', handleModalBackgroundClick);
+    }
+    if (BUTTON_CLOSE_NEW) {
+        // Retirer d'abord l'event listener s'il existe pour éviter les doublons
+        BUTTON_CLOSE_NEW.removeEventListener('click', closeModalNew);
+        BUTTON_CLOSE_NEW.addEventListener('click', closeModalNew);
+    }
     let modal_wrapper = document.querySelector(".modal-wrapper-new")
-    modal_wrapper.style.display = "flex"
+    if (modal_wrapper) {
+        modal_wrapper.style.display = "flex"
+        // Empêcher la fermeture quand on clique sur le contenu
+        modal_wrapper.removeEventListener('click', handleModalContentClick);
+        modal_wrapper.addEventListener('click', handleModalContentClick);
+    }
     resetPhotoSelection(); //REMISE A VIDE DE LA SELECTION PHOTO
     resetForm();// REMISE A VIDE FORMULAIRE AJOUT PHOTO 
     loadCategories();
 }
 
 
-// Fonction pour fermer la modale d'ajout
-function closeModalNew() {
-    if (modal_new) {
-        modal_new.style.display = "none";
-    }
-}
 
 
 // Bouton retour : on ferme la modale d'ajout et on rouvre la galerie
-BUTTON_BACK.addEventListener("click", function () {
-    if (modal_new) modal_new.style.display = "none";
-    document.querySelector("#modal1").style.display = "flex";
-});
+if (BUTTON_BACK) {
+    BUTTON_BACK.addEventListener("click", function () {
+        closeModalNew();
+        const modal1 = document.querySelector("#modal1");
+        if (modal1) {
+            modal1.style.display = "flex";
+        }
+    });
+}
 
 
 // Bouton "Ajouter photo" : ouvre le sélecteur de fichier
@@ -72,6 +101,35 @@ INPUT_PICTURE.addEventListener("change", function () {
         PICTURE_SELECTION.style.display = "none";
     }
 });
+
+// Fonction pour fermer la modale d'ajout
+function closeModalNew(e) {
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    // Fermer la modale (modal2)
+    if (modal_new) {
+        modal_new.style.display = "none";
+        // Retirer les event listeners
+        modal_new.removeEventListener('click', handleModalBackgroundClick);
+    }
+    const modal2 = document.querySelector("#modal2");
+    if (modal2) {
+        modal2.style.display = "none";
+    }
+    
+    // Fermer TOUS les wrappers modal-wrapper-new
+    const modal_wrappers = document.querySelectorAll(".modal-wrapper-new");
+    modal_wrappers.forEach(function(wrapper) {
+        wrapper.style.display = "none";
+        wrapper.removeEventListener('click', handleModalContentClick);
+    });
+    
+    // Réinitialiser la variable
+    modal_new = null;
+}
 
 
 // Remet à zéro la sélection d'image
@@ -141,15 +199,42 @@ function uploadWork(e) {
     })
         .then(function (response) {
             if (response.status === 201) {
-                alert("Projet ajouté !");
-                resetPhotoSelection();
-                resetForm();
-                if (typeof refreshWorks === "function") {
-                    refreshWorks(GALLERY_MODALE, true);
-                    refreshWorks(GALLERY_DIV, false);
-                }
-                checkForm();
+                // Fermer la modale AUTOMATIQUEMENT après submit réussi
                 closeModalNew();
+                
+                // Fermeture supplémentaire pour être sûr
+                const modal2 = document.querySelector("#modal2");
+                if (modal2) {
+                    modal2.style.display = "none";
+                }
+                const modalWrappersNew = document.querySelectorAll(".modal-wrapper-new");
+                modalWrappersNew.forEach(function(wrapper) {
+                    wrapper.style.display = "none";
+                });
+                
+                // Utiliser setTimeout pour afficher l'alerte APRÈS la fermeture
+                setTimeout(function() {
+                    alert("Projet ajouté !");
+                    
+                    // Réinitialiser le formulaire
+                    resetPhotoSelection();
+                    resetForm();
+                    
+                    // Rafraîchir les galeries
+                    if (typeof refreshWorks === "function") {
+                        // GALLERY_MODALE est déclaré dans modal-gallery.js
+                        const galleryModale = typeof GALLERY_MODALE !== 'undefined' ? GALLERY_MODALE : document.querySelector(".modal-gallery");
+                        if (galleryModale) {
+                            refreshWorks(galleryModale, true);
+                        }
+                        // GALLERY_DIV est déclaré dans gallery.js
+                        const galleryDiv = typeof GALLERY_DIV !== 'undefined' ? GALLERY_DIV : document.querySelector(".gallery");
+                        if (galleryDiv) {
+                            refreshWorks(galleryDiv, false);
+                        }
+                    }
+                    checkForm();
+                }, 100); // Délai de 100ms pour laisser la modale se fermer visuellement
             } else if (response.status === 400) {
                 alert("Requête invalide. Vérifiez les champs.");
             } else if (response.status === 401) {
