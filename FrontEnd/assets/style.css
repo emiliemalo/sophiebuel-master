@@ -1041,3 +1041,12 @@ h2 {
   background-color: grey;
   cursor: not-allowed;
 }
+
+/* Classe pour forcer la fermeture des modales */
+#modal2.force-hidden,
+.modal-wrapper-new.force-hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
