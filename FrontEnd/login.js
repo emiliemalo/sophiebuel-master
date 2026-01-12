@@ -1,42 +1,49 @@
-// Constantes
-const LOGIN_BASE_URL = "http://localhost:5678/api/";
-const USERS_API = LOGIN_BASE_URL + "users/login";
-const LOGIN_BUTTON = document.getElementById("se_connecter");
+//CONSTANTES
+const LOGIN_BASE_URL = "http://localhost:5678/api/"
+const USERS_API = LOGIN_BASE_URL+"users/login";
+const LOGIN_BUTTON = document.getElementById("se_connecter")
 
-// Événement de connexion
+// AJOUT D'UN EVENEMENT AU CLIC POUR SE CONNECTER
 if (LOGIN_BUTTON) {
     LOGIN_BUTTON.addEventListener("click", function() {
         loginUser();
     });
 }
 
-// Fonction de connexion
-function loginUser() {
+
+function loginUser(){
+    //RECUPERATION E-MAIL ET MOT DE PASSE
     let user = {
         email: document.getElementById("email").value,
         password: document.getElementById("password").value
-    };
-    
-    fetch(USERS_API, {
+    }; 
+
+    //APPEL DE L'API POUR VERIFIER L'E-MAIL ET LE MOT DE PASSE
+    fetch (USERS_API,{
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
+             'Content-Type': 'application/json;charset=utf-8'
+         },
+          body: JSON.stringify(user)
     })
-    .then(function(response) {
-        if (response.status === 200) {
+    .then(response => {
+        if (response.status===200){
+            //SI LOGIN OK ON CONVERTI EN JSON 
             return response.json();
-        } else {
-            let loginError = document.getElementById("login_error");
-            loginError.innerHTML = "E-mail ou mot de passe incorrect";
-            loginError.style.display = "flex";
+        }else{
+            //SI EMAIL OU MDP KO ON AFFICHE MESSAGE ERREUR
+            loginError=document.getElementById("login_error");
+            loginError.innerHTML="E-mail ou mot de passe incorrect";
+            loginError.style.display="flex";
         }
     })
-    .then(function(data) {
-        if (data) {
+
+    .then(data=>{
+        if(data){ //SI LOGIN OK 
+            // STOCKAGE DU TOKEN DANS LE SESSION STORAGE
             sessionStorage.setItem("token", data.token);
-            window.location.href = "index.html";
+            // REDIRECTION VERS LA PAGE D'ACCUEIL
+             window.location.href = "index.html";
         }
     });
 }

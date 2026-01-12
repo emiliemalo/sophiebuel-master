@@ -1,7 +1,8 @@
 
 // Déclaration des constantes pour les éléments du DOM et les URLs
-// WORKS_API, CATEGORY_API, GALLERY_DIV sont déjà déclarées dans gallery.js
-// GALLERY_MODALE est déjà déclarée dans modal-gallery.js
+// Utiliser les constantes globales si elles existent, sinon fallback local
+const WORKS_API_LOCAL = (typeof WORKS_API !== 'undefined') ? WORKS_API : "http://localhost:5678/api/works";
+const CATEGORY_API_LOCAL = (typeof CATEGORY_API !== 'undefined') ? CATEGORY_API : "http://localhost:5678/api/categories";
 const BUTTON_CLOSE_NEW = document.querySelector('.js-modal-close-new');
 const BUTTON_BACK = document.querySelector('.modal-back');
 const BUTTON_ADD = document.querySelector('.button-add-photo');
@@ -14,21 +15,42 @@ const BUTTON_SUBMIT = document.querySelector('.button-submit');
 
 let modal_new = null;
 
+// Handler pour fermer la modal en cliquant sur le fond
+function handleModalBackgroundClick(e) {
+    // Si on clique directement sur la modal (le fond), on ferme
+    // e.currentTarget est toujours la modal (#modal2)
+    // e.target est l'élément sur lequel on a cliqué
+    if (e.target === e.currentTarget) {
+        closeModalNew(e);
+    }
+}
+
+// Handler pour empêcher la propagation des clics sur le contenu
+function handleModalContentClick(e) {
+    e.stopPropagation();
+}
 
 // Fonction simple pour ouvrir la modale d'ajout de photo
 //FONCTION OUVERTURE BOITE MODALE
 const OPEN_MODAL_NEW = function (e) {
-    e.preventDefault()
+    if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
     //ON CACHE LA MODAL-GALLERY
     const modal = document.querySelector("#modal1");
-    modal.style.display="none";
+    if (modal) {
+        modal.style.display="none";
+    }
     //ON AFFICHE LA MODALE DE CREATION
     modal_new=document.querySelector("#modal2");
-    modal_new.style.display="flex"
-    modal_new.addEventListener('click', closeModalNew)
-    BUTTON_CLOSE_NEW.addEventListener('click', closeModalNew)
+    if (modal_new) {
+        modal_new.style.display="flex"
+    }
     let modal_wrapper=document.querySelector(".modal-wrapper-new")
-    modal_wrapper.style.display="flex"
+    if (modal_wrapper) {
+        modal_wrapper.style.display="flex"
+    }
     resetPhotoSelection(); //REMISE A VIDE DE LA SELECTION PHOTO
     resetForm();// REMISE A VIDE FORMULAIRE AJOUT PHOTO 
     loadCategories();
@@ -38,52 +60,29 @@ const OPEN_MODAL_NEW = function (e) {
 // Fonction pour fermer la modale d'ajout
 function closeModalNew(e) {
     if (e) {
-        // Si on clique sur le contenu de la modale (modal-wrapper-new), on ne ferme pas
-        if (e.target.closest('.modal-wrapper-new')) {
-            return;
-        }
-        
-        // On ferme seulement si on clique sur le fond (modal_new) ou le bouton de fermeture
-        if (e.target === modal_new || e.target === BUTTON_CLOSE_NEW || e.target.closest('.js-modal-close-new')) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // On ferme la modale
-            if (modal_new) {
-                modal_new.style.display = "none";
-                modal_new.removeEventListener('click', closeModalNew);
-                BUTTON_CLOSE_NEW.removeEventListener('click', closeModalNew);
-            }
-        }
-    } else {
-        // Appel sans événement (depuis uploadWork par exemple)
-        if (modal_new) {
-            modal_new.style.display = "none";
-            modal_new.removeEventListener('click', closeModalNew);
-            BUTTON_CLOSE_NEW.removeEventListener('click', closeModalNew);
-        }
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    if (modal_new) {
+        modal_new.style.display = "none";
     }
 }
 
 
-// Bouton retour : on ferme la modale d'ajout et on rouvre la galerie
-BUTTON_BACK.addEventListener("click", function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+// Bouton retour ferme la modale d'ajout et on rouvre la galerie
+BUTTON_BACK.addEventListener("click", function() {
     if (modal_new) modal_new.style.display = "none";
     document.querySelector("#modal1").style.display = "flex";
 });
 
 
-// Bouton "Ajouter photo" : ouvre le sélecteur de fichier
-BUTTON_ADD.addEventListener("click", function(e) {
-    e.preventDefault();
-    e.stopPropagation();
+// Bouton pour ouvrir le browser
+BUTTON_ADD.addEventListener("click", function() {
     INPUT_PICTURE.click();
 });
 
 
-// Quand on choisit une image, on affiche l'aperçu
+// Apperçu de l'image sélectionnée
 INPUT_PICTURE.addEventListener("change", function() {
     if (this.files[0]) {
         if (this.files[0].size > 4194304) {
@@ -121,7 +120,7 @@ function loadCategories() {
     option.value = 0;
     option.text = "";
     CATEGORIES_SELECT.appendChild(option);
-    fetch(CATEGORY_API)
+    fetch(CATEGORY_API_LOCAL)
         .then(function(response) { return response.json(); })
         .then(function(categories) {
             categories.forEach(function(category) {
@@ -155,48 +154,37 @@ function uploadWork(e) {
     formData.append("image", INPUT_PICTURE.files[0]);
     formData.append("title", TITLE_NEW_PHOTO.value.trim());
     formData.append("category", CATEGORIES_SELECT.value);
-    
     // Envoie la requête
-    fetch(WORKS_API, {
+    fetch(WORKS_API_LOCAL, {
         method: "POST",
         headers: {
             'Authorization': 'Bearer ' + token
-            // Ne pas mettre Content-Type pour FormData, le navigateur le fait automatiquement
         },
         body: formData
     })
     .then(function(response) {
-        console.log("Réponse API:", response.status, response.statusText);
         if (response.status === 201) {
-            return response.json().then(function(data) {
-                console.log("Projet ajouté avec succès:", data);
-                alert("Projet ajouté !");
-                resetPhotoSelection();
-                resetForm();
-                if (typeof refreshWorks === "function") {
-                    refreshWorks(GALLERY_MODALE, true);
-                    refreshWorks(GALLERY_DIV, false);
-                }
-                checkForm();
-                closeModalNew();
-            });
+            alert("Projet ajouté !");
+            // On réinitialise le formulaire mais on garde la modal ouverte
+            resetPhotoSelection();
+            resetForm();
+            // On rafraîchit les galeries pour voir la nouvelle photo
+            if (typeof refreshWorks === "function") {
+                refreshWorks(document.querySelector(".modal-gallery"), true);
+                refreshWorks(document.querySelector(".gallery"), false);
+            }
+            checkForm();
+            // On ne ferme PAS la modal pour pouvoir ajouter d'autres photos
         } else if (response.status === 400) {
-            return response.json().then(function(data) {
-                console.error("Erreur 400:", data);
-                alert("Requête invalide. Vérifiez les champs.");
-            }).catch(function() {
-                alert("Requête invalide. Vérifiez les champs.");
-            });
+            alert("Requête invalide. Vérifiez les champs.");
         } else if (response.status === 401) {
             alert("Session expirée ou non autorisée.");
         } else {
-            console.error("Erreur inattendue:", response.status, response.statusText);
-            alert("Erreur lors de l'ajout du projet (code: " + response.status + ").");
+            alert("Erreur lors de l'ajout du projet.");
         }
     })
-    .catch(function(error) {
-        console.error("Erreur réseau:", error);
-        alert("Erreur réseau ou serveur: " + error.message);
+    .catch(function() {
+        alert("Erreur réseau ou serveur.");
     });
 }
 
@@ -221,27 +209,39 @@ function checkForm() {
 
 // On vérifie le formulaire à chaque changement
 INPUT_PICTURE.addEventListener("change", checkForm);
-INPUT_PICTURE.addEventListener("click", function(e) {
-    e.stopPropagation();
-});
-
 CATEGORIES_SELECT.addEventListener("change", checkForm);
-CATEGORIES_SELECT.addEventListener("click", function(e) {
-    e.stopPropagation();
-});
-
 TITLE_NEW_PHOTO.addEventListener("input", checkForm);
-TITLE_NEW_PHOTO.addEventListener("click", function(e) {
-    e.stopPropagation();
-});
 
 // On gère la soumission du formulaire
-BUTTON_SUBMIT.addEventListener("click", function(e) {
-    e.stopPropagation();
-    uploadWork(e);
-});
-document.querySelectorAll('#ajout_projet').forEach(a => {
-    a.addEventListener('click', OPEN_MODAL_NEW)
-})
+BUTTON_SUBMIT.addEventListener("click", uploadWork);
 
+// Initialisation des event listeners une seule fois au chargement
+document.addEventListener('DOMContentLoaded', function() {
+    // Event listener pour fermer la modal en cliquant sur le fond
+    const modal2 = document.querySelector("#modal2");
+    if (modal2) {
+        modal2.addEventListener('click', handleModalBackgroundClick);
+    }
+    
+    // Event listener pour empêcher la fermeture quand on clique sur le contenu
+    const modal_wrapper = document.querySelector(".modal-wrapper-new");
+    if (modal_wrapper) {
+        modal_wrapper.addEventListener('click', handleModalContentClick);
+    }
+    
+    // Event listener pour le bouton de fermeture
+    if (BUTTON_CLOSE_NEW) {
+        BUTTON_CLOSE_NEW.addEventListener('click', closeModalNew);
+    }
+});
+
+// Ajout de l'event listener pour le bouton "Ajouter une photo"
+// Utilisation de la délégation d'événements sur document pour fonctionner même si le bouton est dans une modal cachée
+document.addEventListener('click', function(e) {
+    // Vérifier si le clic est sur le bouton "Ajouter une photo" ou un de ses enfants
+    const target = e.target.closest('#ajout_projet');
+    if (target) {
+        OPEN_MODAL_NEW(e);
+    }
+});
 
